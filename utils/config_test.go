@@ -23,3 +23,18 @@ func TestCheckMutuallyExclusiveSettingsFail(t *testing.T) {
 		t.Errorf("got: %s, want: %s", got, "error")
 	}
 }
+
+func TestAliasesDockerfile_buildDockerfile(t *testing.T) {
+	dockerfile := "../Dockerfile"
+	config := viper.New()
+	config.RegisterAlias("dockerfile", "build.dockerfile")
+	config.Set("dockerfile", dockerfile)
+	got := config.Get("dockerfile")
+	if got != dockerfile {
+		t.Errorf("with param \"dockerfile\", got: %s, want: %s", got, dockerfile)
+	}
+	got = config.Get("build.dockerfile")
+	if got != dockerfile {
+		t.Errorf("with param \"build.dockerfile\", got: %s, want: %s", got, dockerfile)
+	}
+}
