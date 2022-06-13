@@ -46,11 +46,12 @@ func (d *Docker) SetPath(path string) {
 	} else {
 		d.path, _ = os.Getwd()
 	}
+	d.path = strings.ToLower(d.path)
 }
 
 // GetPath get the image name
 func (d *Docker) GetPath() (path string) {
-	return d.path
+	return strings.ToLower(d.path)
 }
 
 // SetImage set the image name

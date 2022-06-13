@@ -2,6 +2,7 @@ package docker
 
 import (
 	"os"
+	"strings"
 	"testing"
 )
 
@@ -39,7 +40,8 @@ func TestSetPathEmpty(t *testing.T) {
 	d := new(Docker)
 	d.SetPath("")
 	got := d.path
-	want, _ := os.Getwd()
+	path, _ := os.Getwd()
+	want := strings.ToLower(path)
 	if got != want {
 		t.Errorf("got: %v, want: %v", got, want)
 	}
@@ -47,7 +49,7 @@ func TestSetPathEmpty(t *testing.T) {
 
 func TestGetPath(t *testing.T) {
 	d := new(Docker)
-	d.path = "test_path"
+	d.SetPath("test_path")
 	got := d.GetPath()
 	want := "test_path"
 	if got != want {
@@ -57,7 +59,18 @@ func TestGetPath(t *testing.T) {
 
 func TestSetImageEmpty(t *testing.T) {
 	d := new(Docker)
-	d.path = "test_path"
+	d.SetPath("test_path")
+	d.SetImage("")
+	got := d.image
+	want := "vsc-test_path-5da6ae5928d4a1ce395878ae9c7ea1f6"
+	if got != want {
+		t.Errorf("got: %s, want: %s", got, want)
+	}
+}
+
+func TestSetImageEmptyCapital(t *testing.T) {
+	d := new(Docker)
+	d.SetPath("Test_Path")
 	d.SetImage("")
 	got := d.image
 	want := "vsc-test_path-5da6ae5928d4a1ce395878ae9c7ea1f6"
@@ -78,7 +91,7 @@ func TestSetImage(t *testing.T) {
 
 func TestGetImage(t *testing.T) {
 	d := new(Docker)
-	d.image = "test_image"
+	d.SetImage("test_image")
 	got := d.GetImage()
 	want := "test_image"
 	if got != want {
@@ -111,7 +124,7 @@ func TestSetContainerEmpty(t *testing.T) {
 
 func TestGetContainer(t *testing.T) {
 	d := new(Docker)
-	d.container = "test_container"
+	d.SetContainer("test_container")
 	got := d.GetContainer()
 	want := "test_container"
 	if got != want {
